@@ -20,19 +20,21 @@ pipeline {
                 }
             }
         } */
-        stage('docker build & docker push')    
-            steps{
-                script{
-                    withCredentials([string(credentialsId: 'nexus-login', variable: 'nexusloginvariable')]) {
-                    '''
-                    docker build -t 172.31.40.82:8083:springapp:${VERSION} .
-                    docker login -u admin -p $nexusloginvariable 172.31.40.82:8083
-                    docker push 172.31.40.82:8083:springapp:${VERSION}
-                    docker rmi 172.31.40.82:8083:springapp:${VERSION}
-                    '''
-                }
+        stages {
+            stage('docker build & docker push'){
+                steps{
+                    script{
+                        withCredentials([string(credentialsId: 'nexus-login', variable: 'nexusloginvariable')]) {
+                        '''
+                        docker build -t 172.31.40.82:8083:springapp:${VERSION} .
+                        docker login -u admin -p $nexusloginvariable 172.31.40.82:8083
+                        docker push 172.31.40.82:8083:springapp:${VERSION}
+                        docker rmi 172.31.40.82:8083:springapp:${VERSION}
+                        '''
+                    }
                     
                 }
             }
         }
-    
+    }
+} 
